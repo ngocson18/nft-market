@@ -3,8 +3,20 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
-};
+  production: false,
+  apiServer: {
+    ssl: true,
+    host: '',
+    port: '',
+    prefix: 'api',
+    url: '',
+    paths: {
+      home: {
+        list: 'Home/main'
+      }
+    }
+  }
+}
 
 /*
  * For easier debugging in development mode, you can import the following file
