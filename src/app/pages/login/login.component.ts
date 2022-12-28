@@ -1,39 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
+import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
+import { SocialUser } from '@abacritt/angularx-social-login';
+import {
+  FacebookLoginProvider,
+  AmazonLoginProvider,
+  VKLoginProvider,
+  MicrosoftLoginProvider,
+} from '@abacritt/angularx-social-login';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  user: SocialUser | undefined;
+  GoogleLoginProvider = GoogleLoginProvider;
 
-  loginForm: any = '';
-  socialUser: any = '';
-  isLoggedIn: boolean = false;
   constructor(
-    private formBuilder: FormBuilder,
-    private googleAuthService: SocialAuthService
+    private readonly _authService: SocialAuthService
   ) {}
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-
-    this.googleAuthService.authState.subscribe((user) => {
-        this.socialUser = user;
-        this.isLoggedIn = (user != null);
-        console.log(this.socialUser);
+    this._authService.authState.subscribe((user) => {
+      this.user = user;
     });
   }
 
-  loginWithGoogle(): void {
-    this.googleAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-}
+  signInWithFB(): void {
+    this._authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
 
-  logOut(): void {
-      this.googleAuthService.signOut();
+  signInWithAmazon(): void {
+    this._authService.signIn(AmazonLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithVK(): void {
+    this._authService.signIn(VKLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithMicrosoft(): void {
+    this._authService.signIn(MicrosoftLoginProvider.PROVIDER_ID);
+  }
+
+  signOut(): void {
+    this._authService.signOut();
+  }
+
+  refreshGoogleToken(): void {
+    this._authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 }
